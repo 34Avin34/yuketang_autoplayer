@@ -125,6 +125,25 @@ Main differences from upstream: support for the 2025 "learning space" UI, automa
 browser/driver selection, speed pinning, replay-from-zero, self-healing, and the
 completion-counter check.
 
+### Why this had to be rewritten
+
+The upstream implementation targets the **earlier course-list UIs** — the legacy
+`leaf-detail` list and the `study-unit` list on `www.yuketang.cn`.
+
+In 2025 Yuketang rolled out a new "learning space" (`ai-workspace/lms-graph`) that changed
+quite a lot:
+
+- the sidebar became a collapsible tree (`nav-item` / `leaf-item`) instead of a flat list;
+- completion state became icons: **check = finished**, **pie = half-watched**, empty = not started;
+- the player is now `xt_video_player`, which keeps its own speed state and keeps overwriting
+  `video.playbackRate`;
+- the login page moved to a redesigned `/web` QR page with a different URL and DOM.
+
+Because of that, the upstream selectors, completion check, speed handling and login flow
+**do not work on the new UI at all**. This project rewrites those parts for the new
+interface while remaining compatible with the old one — it is a re-implementation of the
+same idea, not a simple fork.
+
 ---
 
 ## AI assistance
