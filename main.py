@@ -51,7 +51,11 @@ try:
 except Exception:
     pass
 
-HERE = Path(__file__).resolve().parent
+# 打包成 exe 后 __file__ 指向解压出来的临时目录，配置和 debug 要跟着 exe 走
+if getattr(sys, 'frozen', False):
+    HERE = Path(sys.executable).resolve().parent
+else:
+    HERE = Path(__file__).resolve().parent
 CONFIG_NAME = 'config.ini'
 
 # 这些是页面上代表「视频」和「未开放」的 class 片段，随雨课堂版本不同而不同，
