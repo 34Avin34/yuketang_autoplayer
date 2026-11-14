@@ -12,52 +12,40 @@ plays them, and moves on — no manual clicking.
 
 ---
 
-## Quick start (4 steps)
+## Quick start
 
-**1. Install Python 3.9+** — during setup tick **`Add python.exe to PATH`**.
+### Option A — prebuilt EXE (no Python needed)
 
-**2. Install the dependency**
-
-```bash
-pip install -r requirements.txt
-```
-
-**3. Fill in the config**
-
-Copy `config.ini.example` to `config.ini` and set **one** line:
+1. Open the [Releases](https://github.com/34Avin34/yuketang_autoplayer/releases) page and
+   download `YuketangAutoPlayer.exe` into any folder.
+2. **Run it once** — it creates `config.ini` next to the EXE, then asks you to edit it.
+3. Open `config.ini` in Notepad and fill in one line:
 
 ```ini
 course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?node_id=xxxx
 ```
 
-Open the course in your browser, click **学习内容 / 学习空间**, then copy the whole URL
-from the address bar. `cookie` can stay empty.
+4. **Run it again** — scan the QR code in the browser window, playback starts.
 
-**4. Run**
+> Windows SmartScreen / antivirus may warn about the EXE; a PyInstaller false positive is
+> very common for small tools like this. Click "More info → Run anyway", or use Option B, or
+> build it yourself with `pyinstaller --onefile --collect-all selenium main.py`.
 
-Double-click `启动.bat`, or:
+### Option B — from source
 
-```bash
-python main.py
-```
+1. Install Python 3.9+ — tick **`Add python.exe to PATH`** during setup.
+2. Install the dependency: `pip install -r requirements.txt`
+3. Copy `config.ini.example` to `config.ini` and set `course_url` (same as above).
+4. Run `启动.bat`, or `python main.py`.
 
-In the browser window that opens, **scan the QR code once**. The `sessionid` is saved back
-into `config.ini` automatically, then playback starts. You can minimize the window, but
-**don't move your mouse into it** — the script is driving that browser.
+### Both options
 
-> Just want to check your setup? `python main.py --list` prints the pending episodes and
-> plays nothing.
+Scan the QR code once; the `sessionid` is saved back into `config.ini`, then playback
+starts. You can minimize the window, but **don't move your mouse into it** — the script is
+driving that browser.
 
----
-
-## Prebuilt EXE
-
-Grab `YuketangAutoPlayer.exe` from the [Releases](../../releases) page — no Python needed.
-Put it in a folder, run it once (it creates `config.ini`), fill `course_url`, run it again.
-
-> Windows SmartScreen / antivirus may warn about the EXE because it is built with
-> PyInstaller (a very common false positive). Source code is in this repo; build it yourself
-> with `pyinstaller --onefile --collect-all selenium main.py` if you prefer.
+> Just want to check your setup? `python main.py --list` (or `YuketangAutoPlayer.exe --list`)
+> prints the pending episodes and plays nothing.
 
 ---
 

@@ -7,11 +7,31 @@
 > 它不能替你完成作业，也可能违反你所在学校的规定和雨课堂用户协议。
 > 使用前请先读文末的[免责声明](#免责声明)。
 
+**不想装 Python？** [Releases](https://github.com/34Avin34/yuketang_autoplayer/releases)
+里有打包好的 `YuketangAutoPlayer.exe`，双击即用（详见下面的方式 A）。
+
 ---
 
 ## 一、30 秒上手（先看这里）
 
-只需要 4 步：
+### 方式 A：直接用打包好的 EXE（最省事，不用装 Python）
+
+1. 打开 [Releases](https://github.com/34Avin34/yuketang_autoplayer/releases) 页面，
+   下载 `YuketangAutoPlayer.exe`，放进任意一个文件夹；
+2. **双击运行一次** —— 它会在**同目录**生成 `config.ini`，然后提示你去填；
+3. 用记事本打开 `config.ini`，把这一行填上：
+
+```ini
+course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?node_id=xxxx
+```
+
+4. **再双击一次** —— 弹出的浏览器窗口里扫码登录，登录后自动开始。
+
+> 第一次运行 Windows 可能弹「Windows 已保护你的电脑」，这是 PyInstaller 打包程序的
+> 常见误报（这类小工具几乎都会被拦），点「更多信息 → 仍要运行」即可。
+> 不放心就用下面的方式 B，或者自己打包。
+
+### 方式 B：用源码运行（想改代码 / 不信任 exe）
 
 **1. 装 Python**（3.9 或更高）
 到 [python.org](https://www.python.org/downloads/) 下载安装，**安装时勾选
@@ -38,10 +58,15 @@ course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?nod
 
 双击 `启动.bat`，或者命令行 `python main.py`。
 
+### 两种方式共同的后续
+
 弹出的浏览器窗口里**扫一次码登录**，登录成功后它会自动把登录状态存进 `config.ini`，
 然后开始一节一节往下播。窗口可以最小化，**但别用鼠标去点那个浏览器**。
 
-> 想先确认"配对了没有"，跑 `python main.py --list` —— 只列清单、不播视频，很安全。
+> 想先确认"配对了没有"：
+> 源码方式跑 `python main.py --list`；
+> EXE 方式跑 `YuketangAutoPlayer.exe --list`。
+> 都只列清单、不播视频，很安全。
 
 ---
 
@@ -90,6 +115,8 @@ course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?nod
 | `implicitly_wait` | `20` | 等页面元素的最长秒数，网络慢可以调大 |
 | `max_minutes_per_video` | `180` | 单个视频最多等多少分钟，超时就跳过 |
 
+> 用 EXE 版本时，`config.ini` 就在 exe 旁边（第一次运行自动生成），改完同样要重新运行。
+
 配置改完**必须重启程序**才生效。
 
 ### 播放策略（默认行为）
@@ -102,12 +129,14 @@ course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?nod
 
 ## 四、常用命令
 
+> 用 EXE 版本时，把下表的 `python main.py` 换成 `YuketangAutoPlayer.exe`，参数完全一样。
+
 | 命令 | 作用 |
 |---|---|
 | `python main.py` | 开始播放 |
 | `python main.py --list` | 只列出没看完的视频，不播 |
 | `python main.py --login` | 强制重新登录，并把新 sessionid 存回配置 |
-| `python main.py --dump` | 保存课程页结构到 `debug/`（给我反馈问题时用） |
+| `python main.py --dump` | 保存课程页结构到 `debug/`（提 issue 时附上） |
 | `python main.py --self-test` | 只测试浏览器能不能启动 |
 | `python main.py --headless` | 后台跑（不能扫码登录） |
 | `python main.py --rate 1.5` | 临时指定倍速 |
@@ -139,6 +168,7 @@ course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?nod
 | 一直刷 `实际0.0x` | 卡流。程序会自动重新加载/重启浏览器 |
 | `media error 4` | 该节视频地址异常，程序会重启浏览器重试 2 次再跳过 |
 | 完成数一直不涨 | 平台不认当前倍速，把 `playback_rate` 改成 `1` 试试 |
+| 双击 exe 被杀软 / SmartScreen 拦下 | PyInstaller 打包程序的常见误报。点「更多信息 → 仍要运行」，或改用源码方式 |
 
 ---
 
