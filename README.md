@@ -16,23 +16,49 @@
 
 ### 方式 A：直接用打包好的 EXE（最省事，不用装 Python）
 
-1. 打开 [Releases](https://github.com/34Avin34/yuketang_autoplayer/releases) 页面，
-   下载 `YuketangAutoPlayer.exe`，放进任意一个文件夹；
-2. **双击运行一次** —— 它会在**同目录**生成 `config.ini`，然后提示你去填；
-3. 用记事本打开 `config.ini`，把这一行填上：
+**1. 下载 exe**
+打开 [Releases](https://github.com/34Avin34/yuketang_autoplayer/releases)，找到最新的
+`v1.0.0`，在「Assets」里点 `YuketangAutoPlayer.exe` 下载。
+（别点 `Source code (zip)`，那是源码；想用源码就走方式 B。）
+
+**2. 放进一个专用文件夹**
+比如新建 `D:\yuketang` 再放进去。
+
+- 别放 `C:\Program Files`：那里需要管理员权限，`config.ini` 会写不进去；
+- 别留在「下载」文件夹：容易被清理工具顺手删掉。
+
+**3. 先双击运行一次**
+会闪一下黑窗口然后自动关闭，**这是正常的** —— 它在自己所在的文件夹里生成了
+`config.ini`（所有设置都在这一个文件里）。
+
+**4. 填课程地址**
+右键 `config.ini` →「打开方式」→ 记事本。找到这一行：
 
 ```ini
+; 结构说明（这一行是注释，不用改）
+;         └── 课程/班级 id   └── 视频 id      └── 小节 id
 course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?node_id=xxxx
 ```
 
-4. **再双击一次** —— 弹出的浏览器窗口里扫码登录，登录后自动开始。
+把等号**右边整段**替换成你从浏览器复制的课程地址：
+
+- 保留 `course_url = ` 前缀和等号，只换右边；
+- **不要加引号**，地址直接写；
+- 保存后确认文件名还是 `config.ini`（不是 `config.ini.txt`，记事本容易加后缀）。
+
+**5. 再双击一次**
+会弹出 Edge 窗口 → 加载课程页 → **用微信或雨课堂 App 扫码登录** → 登录成功后自动开始。
+
+- 旁边那个黑窗口就是日志（能看到"播放中 xx%、实际 2.0x"），**可以最小化，别关**；
+- 登录状态会自动写回 `config.ini`，下次不用再扫；
+- **别用鼠标去点那个浏览器窗口**，程序正在控制它。
 
 > 这是未签名的 PyInstaller 打包程序，Windows 可能提示：
 > - 蓝色「**Windows 已保护你的电脑**」（SmartScreen）→ 点「更多信息 → 仍要运行」；
 > - 「**智能应用控制**已阻止可能不安全的应用」（Smart App Control，部分 Win11 默认开启）
 >   → **没有放行按钮**，只能改用下面的**方式 B（源码）**，或手动关闭该功能。
 >
-> 不放心 exe 就一律用方式 B，效果完全一样。
+> 任何一种提示都和"有没有病毒"无关 —— 只是没买代码签名证书。不放心就一律用方式 B。
 
 ### 方式 B：用源码运行（想改代码 / 不信任 exe）
 

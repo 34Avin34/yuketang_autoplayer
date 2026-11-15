@@ -16,16 +16,42 @@ plays them, and moves on — no manual clicking.
 
 ### Option A — prebuilt EXE (no Python needed)
 
-1. Open the [Releases](https://github.com/34Avin34/yuketang_autoplayer/releases) page and
-   download `YuketangAutoPlayer.exe` into any folder.
-2. **Run it once** — it creates `config.ini` next to the EXE, then asks you to edit it.
-3. Open `config.ini` in Notepad and fill in one line:
+**1. Download the EXE**
+Open [Releases](https://github.com/34Avin34/yuketang_autoplayer/releases), open the latest
+`v1.0.0`, and click `YuketangAutoPlayer.exe` under "Assets".
+(Not `Source code (zip)` — that's the source; use Option B for that.)
+
+**2. Put it in a dedicated folder**
+e.g. create `D:\yuketang` and move the EXE there.
+
+- Avoid `C:\Program Files` — it needs admin rights and `config.ini` cannot be written there.
+- Avoid the Downloads folder — cleanup tools like to delete it.
+
+**3. Run it once**
+A black console flashes and closes by itself — **that is expected**: it just created
+`config.ini` next to the EXE (that single file holds all settings).
+
+**4. Fill in the course URL**
+Right-click `config.ini` → "Open with" → Notepad. Find this line:
 
 ```ini
+; the line above starting with ';' is a comment — leave it alone
 course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?node_id=xxxx
 ```
 
-4. **Run it again** — scan the QR code in the browser window, playback starts.
+Replace **everything after the `=`** with the course URL you copied:
+
+- keep the `course_url = ` prefix and the `=`;
+- **no quotes** around the URL;
+- save it, and make sure the file is still named `config.ini` (Notepad may append `.txt`).
+
+**5. Run it again**
+Edge opens → the course page loads → **scan the QR code** with WeChat / the Yuketang app.
+Playback starts by itself after login.
+
+- The console window next to it is the log (`播放中 xx% 实际2.0x`); minimize it, **don't close it**;
+- the login is saved back into `config.ini`, so you only scan once;
+- **don't click inside the browser window** — the script is driving it.
 
 > The EXE is an unsigned PyInstaller build, so Windows may block it in one of two ways:
 > - blue "**Windows protected your PC**" (SmartScreen) → click "More info → Run anyway";
@@ -33,7 +59,8 @@ course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?nod
 >   Control) → **there is no "run anyway" button**; use **Option B** instead, or turn that
 >   feature off (it usually cannot be re-enabled without resetting Windows).
 >
-> If unsure, just use Option B — the result is identical.
+> Neither is a virus warning — it simply means the binary has no code-signing certificate.
+> If unsure, just use Option B; the result is identical.
 
 ### Option B — from source
 
