@@ -27,9 +27,12 @@ course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?nod
 
 4. **再双击一次** —— 弹出的浏览器窗口里扫码登录，登录后自动开始。
 
-> 第一次运行 Windows 可能弹「Windows 已保护你的电脑」，这是 PyInstaller 打包程序的
-> 常见误报（这类小工具几乎都会被拦），点「更多信息 → 仍要运行」即可。
-> 不放心就用下面的方式 B，或者自己打包。
+> 这是未签名的 PyInstaller 打包程序，Windows 可能提示：
+> - 蓝色「**Windows 已保护你的电脑**」（SmartScreen）→ 点「更多信息 → 仍要运行」；
+> - 「**智能应用控制**已阻止可能不安全的应用」（Smart App Control，部分 Win11 默认开启）
+>   → **没有放行按钮**，只能改用下面的**方式 B（源码）**，或手动关闭该功能。
+>
+> 不放心 exe 就一律用方式 B，效果完全一样。
 
 ### 方式 B：用源码运行（想改代码 / 不信任 exe）
 
@@ -168,7 +171,8 @@ course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?nod
 | 一直刷 `实际0.0x` | 卡流。程序会自动重新加载/重启浏览器 |
 | `media error 4` | 该节视频地址异常，程序会重启浏览器重试 2 次再跳过 |
 | 完成数一直不涨 | 平台不认当前倍速，把 `playback_rate` 改成 `1` 试试 |
-| 双击 exe 被杀软 / SmartScreen 拦下 | PyInstaller 打包程序的常见误报。点「更多信息 → 仍要运行」，或改用源码方式 |
+| 双击 exe 弹「Windows 已保护你的电脑」 | 这是 SmartScreen（蓝色窗口）。点「更多信息 → 仍要运行」 |
+| 双击 exe 弹「**智能应用控制**已阻止可能不安全的应用」 | 这是 Windows 11 的 Smart App Control，未签名程序会被直接拦下且**没有「仍要运行」**。请改用**方式 B（源码）**；或在「设置 → 隐私和安全性 → Windows 安全中心 → 应用和浏览器控制 → 智能应用控制」里关闭它（关掉后想再打开通常要重置系统，谨慎） |
 
 ---
 

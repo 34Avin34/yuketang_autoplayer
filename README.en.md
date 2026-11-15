@@ -27,9 +27,13 @@ course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?nod
 
 4. **Run it again** — scan the QR code in the browser window, playback starts.
 
-> Windows SmartScreen / antivirus may warn about the EXE; a PyInstaller false positive is
-> very common for small tools like this. Click "More info → Run anyway", or use Option B, or
-> build it yourself with `pyinstaller --onefile --collect-all selenium main.py`.
+> The EXE is an unsigned PyInstaller build, so Windows may block it in one of two ways:
+> - blue "**Windows protected your PC**" (SmartScreen) → click "More info → Run anyway";
+> - "**Smart App Control** has blocked a potentially unsafe app" (Windows 11 Smart App
+>   Control) → **there is no "run anyway" button**; use **Option B** instead, or turn that
+>   feature off (it usually cannot be re-enabled without resetting Windows).
+>
+> If unsure, just use Option B — the result is identical.
 
 ### Option B — from source
 
