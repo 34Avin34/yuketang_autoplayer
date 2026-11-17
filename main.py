@@ -417,6 +417,7 @@ UI_NAMES = {
 }
 
 _SPEED_HINTED = [False]   # 倍速没点中的提示只打一次，免得 100 多个视频刷屏
+_MENU_DEAD = [False]      # 这一轮已确认「倍速菜单点不动」，后面的视频不用再试菜单
 
 # 按「文本内容」找倍速菜单项。要点：
 #   - 大小写无关（页面上显示 2.00X，DOM 里可能是 2.00x，靠 CSS 转大写）
@@ -608,6 +609,10 @@ def set_speed(driver, rate: float, verbose: bool = True) -> bool:
             say(f'  播放器菜单最高只到 2.00X，{rate:g}x 用直接锁定倍速的方式设置。')
         return ok()
 
+    # 这一轮已经确认过菜单点不动了，就别每个视频再白试一遍（一次要 5~8 秒）
+    if _MENU_DEAD[0]:
+        return ok()
+
     def try_click(el, real=False):
         try:
             if real:
@@ -713,6 +718,8 @@ def set_speed(driver, rate: float, verbose: bool = True) -> bool:
                 done_msg()
                 return True
 
+    # 所有手段都试过了：记住「这个界面菜单点不动」，后面的视频直接走锁定，省时间
+    _MENU_DEAD[0] = True
     if verbose and not _SPEED_HINTED[0]:
         _SPEED_HINTED[0] = True
         say('  [提示] 播放器菜单点不中，已改为直接锁定倍速，播放器上的标签也会一并改掉。')
@@ -1695,6 +1702,7 @@ def run(args, cfg, path):
         seen_srcs = set()
         prev_done = None
         just_played = False
+        no_credit_streak = 0      # 连续多少节「播完但完成数没涨」
         list_handle = driver.current_window_handle
         index = 0
 
@@ -1728,15 +1736,32 @@ def run(args, cfg, path):
 
             pending = list_pending(driver, ui, els)
 
-            # 上一节播完后，看平台有没有把「已完成」加上去
+            # 上一节播完后，看平台有没有把「已完成」加上去。
+            # 注意：平台记账有延迟，所以「没涨」不能立刻归因到倍速 —— 先等 12 秒再读一次。
             if ui == 'space':
                 _, done_now, _, _ = space_counts(read_space_rows(driver))
-                if just_played and prev_done is not None and done_now <= prev_done:
-                    say('')
-                    say(f'[注意] 上一节播完了，但平台完成数没变（{prev_done} → {done_now}）。')
-                    say('       常见原因：平台不认 2 倍速，或者视频里弹题没答。')
-                    say('       可以先跑 python main.py --rate 1 试一节看看。')
-                    say('')
+                if just_played and prev_done is not None:
+                    if done_now <= prev_done:
+                        say('  完成数暂时没变，等 12 秒再核对（平台记账可能延迟）……')
+                        time.sleep(12)
+                        _, done_later, _, _ = space_counts(read_space_rows(driver))
+                        if done_later > prev_done:
+                            say(f'  只是延迟，完成数已涨到 {done_later}。')
+                            done_now = done_later
+                            no_credit_streak = 0
+                        else:
+                            done_now = done_later
+                            no_credit_streak += 1
+                            say('')
+                            say(f'[注意] 等 12 秒后完成数仍未变（{prev_done} → {done_now}），'
+                                f'连续 {no_credit_streak} 节。')
+                            say('       可能原因：① 平台不认当前倍速；② 视频里有弹题没答；')
+                            say('                 ③ 这一节本来就不计入完成度。')
+                            if no_credit_streak >= 3:
+                                say('       连续多节如此，建议把 config.ini 的 playback_rate 改成 1 再跑。')
+                            say('')
+                    else:
+                        no_credit_streak = 0
                 prev_done = done_now
             just_played = False
 

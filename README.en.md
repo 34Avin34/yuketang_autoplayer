@@ -17,8 +17,8 @@ plays them, and moves on — no manual clicking.
 ### Option A — prebuilt EXE (no Python needed)
 
 **1. Download the EXE**
-Open [Releases](https://github.com/34Avin34/yuketang_autoplayer/releases), open the latest
-`v1.0.0`, and click `YuketangAutoPlayer.exe` under "Assets".
+Open [Releases](https://github.com/34Avin34/yuketang_autoplayer/releases), open the latest release
+(currently `v1.0.1`) and click `YuketangAutoPlayer.exe` under "Assets".
 (Not `Source code (zip)` — that's the source; use Option B for that.)
 
 **2. Put it in a dedicated folder**
@@ -126,6 +126,32 @@ materials are ignored.
   browser and retry; missing list → reopen the course page.
 - After each episode it checks whether the platform's "completed" counter went up and
   warns you if it didn't.
+
+### Three implementation details people usually ask about
+
+**1. Why the speed cannot just be set with `playbackRate`**
+
+The new player (`xt_video_player`) keeps its own speed state and keeps writing
+`video.playbackRate` back to 1. So the script first clicks the player's own `2.00X` menu item;
+that menu ignores synthetic clicks on hidden elements, so when it fails the script
+re-defines `playbackRate` on the `<video>` instance (getter/setter). Every "reset to 1" the
+player performs goes through our setter and ends up at the target rate, and the player's
+label is updated to match. Once the menu is known to be unusable, later videos skip the
+menu entirely (saves 5–8 s each).
+
+**2. Why "rewind to 0" must be paired with "progress went backwards = finished"**
+
+Completion is detected partly by progress going backwards (the platform auto-replays at the
+end). Our own seek to 0 looks exactly the same, so the script resets its tracking point after
+seeking and scales the "abnormal jump" threshold by **current rate × sampling interval** —
+at 16x a single tick advances ~3 s, so a hard-coded 5 s threshold would be misread as the
+platform yanking the position back, causing an endless rewind loop.
+
+**3. "Completion count didn't grow" ≠ "the speed is not accepted"**
+
+Platform bookkeeping lags. The script reads the counter once after each episode, then
+**waits 12 s and reads again**; it only suggests lowering `playback_rate` to 1 after three
+consecutive non-credits. This separates "lag" from "really not accepted".
 
 ---
 
