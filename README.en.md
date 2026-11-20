@@ -155,6 +155,19 @@ consecutive non-credits. This separates "lag" from "really not accepted".
 
 ---
 
+## Troubleshooting
+
+| Symptom | What to do |
+|---|---|
+| `ModuleNotFoundError: No module named 'selenium'` | You used the source version without installing dependencies. Run `python -m pip install -r requirements.txt` in that folder, or use the EXE release. The launcher `启动.bat` now detects this and prints the command instead of a traceback. |
+| "No course list found" | The site changed again. Run `--dump` and open an issue with `debug/page.html` and `debug/diagnose.txt`. |
+| "Cookie invalid, please log in" | Just run it again and scan the QR code; the new sessionid is saved automatically. |
+| Log keeps showing `实际0.0x` | Stalled stream; the player reloads or restarts the browser automatically. |
+| Completion counter never grows | The platform may not accept your speed; try `playback_rate = 1`. |
+| EXE blocked by Windows | SmartScreen → "More info → Run anyway". Smart App Control has no bypass → use the source version. |
+
+---
+
 ## Credits / Inspiration
 
 This project is **not** built from scratch:

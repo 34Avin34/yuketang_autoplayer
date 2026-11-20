@@ -222,6 +222,7 @@ course_url = https://www.yuketang.cn/ai-workspace/lms-graph/xxxx/video/xxxxx?nod
 | 完成数一直不涨 | 平台不认当前倍速，把 `playback_rate` 改成 `1` 试试 |
 | 双击 exe 弹「Windows 已保护你的电脑」 | 这是 SmartScreen（蓝色窗口）。点「更多信息 → 仍要运行」 |
 | 双击 exe 弹「**智能应用控制**已阻止可能不安全的应用」 | 这是 Windows 11 的 Smart App Control，未签名程序会被直接拦下且**没有「仍要运行」**。请改用**方式 B（源码）**；或在「设置 → 隐私和安全性 → Windows 安全中心 → 应用和浏览器控制 → 智能应用控制」里关闭它（关掉后想再打开通常要重置系统，谨慎） |
+| 报 `ModuleNotFoundError: No module named 'selenium'` | 用的是源码方式但没装依赖。在该文件夹打开终端，执行 `python -m pip install -r requirements.txt`；或直接改用 exe 版 |
 
 ---
 

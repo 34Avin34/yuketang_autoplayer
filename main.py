@@ -33,23 +33,43 @@ import time
 import traceback
 from pathlib import Path
 
-from selenium import webdriver
-from selenium.common.exceptions import (
-    NoSuchElementException,
-    StaleElementReferenceException,
-    WebDriverException,
-)
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-
-
 # 控制台中文/符号在 Windows 下偶尔会炸，能改就改成 utf-8
 try:
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 except Exception:
     pass
+
+# 依赖没装时给一句人话，别甩一屏 traceback 就关窗口
+try:
+    from selenium import webdriver
+    from selenium.common.exceptions import (
+        NoSuchElementException,
+        StaleElementReferenceException,
+        WebDriverException,
+    )
+    from selenium.webdriver.common.action_chains import ActionChains
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+except ModuleNotFoundError as _exc:
+    if (_exc.name or '').split('.')[0] != 'selenium':
+        raise
+    print('=' * 62)
+    print('  缺少依赖：selenium 没有安装')
+    print('=' * 62)
+    print(f'  当前使用的 Python：{sys.executable}')
+    print()
+    print('  请在【本文件夹】打开命令行（空白处 Shift+右键 → 在终端中打开），执行：')
+    print()
+    print('      python -m pip install -r requirements.txt')
+    print()
+    print('  或者直接用 Release 里的 YuketangAutoPlayer.exe（不需要 Python）。')
+    print('=' * 62)
+    try:
+        input('按回车键退出...')
+    except Exception:
+        pass
+    raise SystemExit(1)
 
 # 打包成 exe 后 __file__ 指向解压出来的临时目录，配置和 debug 要跟着 exe 走
 if getattr(sys, 'frozen', False):
